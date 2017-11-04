@@ -6,9 +6,15 @@ class File
 {
     private $path;
 
-    public function __construct($path)
+    private $translate;
+
+    private $lang = null;
+
+    public function __construct($path, array $translate, string $lang = null)
     {
         $this->path = $path;
+        $this->translate = $translate;
+        $this->lang = $lang;
     }
 
     public function write($message)
@@ -18,14 +24,32 @@ class File
         $file = fopen($this->path, "w");
         fwrite($file, $stringMessage);
         fclose($file);
+
+        return $stringMessage;
     }
 
     private function stringify(array $messages)
     {
-        $result = "'Month Name','1st expenses day', '2nd expenses day', 'Salary day' /n";
+        if($this->lang == null)
+        {
+            $transArray = $this->translate["en"];
+        } else {
+            $transArray = $this->translate[$this->lang];
+        }
+
+        $result = "'" . $transArray["utils"]["month_name"] . "', '" .
+                  $transArray["utils"]["first_pay"] . "', '" .
+                  $transArray["utils"]["second_pay"] . "', '" .
+                  $transArray["utils"]["salary"] . "' \n";
+
         foreach($messages as $index => $message)
         {
-            $result .= $message[]
+            $result .= "'" . $transArray["months"][$message["month"]] . "', " .
+                       $message["first_pay"] . ", " .
+                       $message["second_pay"] . ", " .
+                       $message["salary_day"] . "\n";
         }
+
+        return $result;
     }
 }

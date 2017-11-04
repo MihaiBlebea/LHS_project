@@ -28,12 +28,14 @@ class Parse
             $first_pay = $this->calculateNextMonday($this->year, $month, 1);
             $second_pay =  $this->calculateNextMonday($this->year, $month, 15);
 
+            $month_year = $this->composeMonthYear($month, $this->year);
+
             $result[$month] = [
                 "month"      => $month,
-                "last_day"   => $day,
-                "salary_day" => $salary_day,
-                "first_pay"  => $first_pay,
-                "second_pay" => $second_pay,
+                "last_day"   => "'" . $month_year . "-" . $this->composeDay($day) . "'",
+                "salary_day" => "'" . $month_year . "-" . $this->composeDay($salary_day) . "'",
+                "first_pay"  => "'" . $month_year . "-" . $this->composeDay($first_pay) . "'",
+                "second_pay" => "'" . $month_year . "-" . $this->composeDay($second_pay) . "'"
             ];
         }
         return $result;
@@ -42,6 +44,16 @@ class Parse
     public function get()
     {
         return $this->days;
+    }
+
+    private function composeMonthYear($month, $year)
+    {
+        return $year . "-" . (($month < 10) ? "0" . $month : $month);
+    }
+
+    private function composeDay($day)
+    {
+        return ($day < 10) ? "0" . $day : $day;
     }
 
     private function composeDate($year, $month, $day)
