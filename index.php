@@ -15,9 +15,10 @@ if($validate->getValid() == true)
 {
     $parse = new Parse($argv[1]);
 
-    $printTo = "log/doc.txt";
+    $printTo = (isset($argv[3])) ? "log/" . $argv[3] . ".txt" : "log/doc.txt";
+    
     $file = new File($printTo, $translate, $argv[2]);
-    $file->write($parse->get());
+    $file->write($parse->getDays());
 
     consoleLog("Content printed to file succesfully! File name is ". $printTo, null);
 } else {

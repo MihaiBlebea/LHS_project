@@ -20,8 +20,7 @@ class Parse
         for($i = 0; $i < 12; $i++)
         {
             $month = $i + 1;
-            $date = $this->year . '-' . $month . '-01';
-            $day = (int) date("t", strtotime($date));
+            $day = $this->lastDayOfMonth($month);
 
             $salary_day = $this->calculateLastFriday($this->year, $month, $day);
 
@@ -41,9 +40,19 @@ class Parse
         return $result;
     }
 
-    public function get()
+    public function getDays()
     {
         return $this->days;
+    }
+
+    public function getYear()
+    {
+        return $this->year;
+    }
+
+    private function lastDayOfMonth($month)
+    {
+        return (int) date("t", strtotime($this->year . '-' . $month . '-01'));
     }
 
     private function composeMonthYear($month, $year)
@@ -56,14 +65,14 @@ class Parse
         return ($day < 10) ? "0" . $day : $day;
     }
 
-    private function composeDate($year, $month, $day)
+    private function getDayOfWeek($year, $month, $day)
     {
         return date("w", strtotime($year . "-" . $month . "-" . $day));
     }
 
     private function calculateLastFriday($year, $month, $day)
     {
-        $day_of_the_week = $this->composeDate($year, $month, $day);
+        $day_of_the_week = $this->getDayOfWeek($year, $month, $day);
 
         if($day_of_the_week == 0)
         {
@@ -80,7 +89,7 @@ class Parse
 
     private function calculateNextMonday($year, $month, $day)
     {
-        $day_of_the_week = $this->composeDate($year, $month, $day);
+        $day_of_the_week = $this->getDayOfWeek($year, $month, $day);
 
         if($day_of_the_week == 0)
         {

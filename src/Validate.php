@@ -52,6 +52,7 @@ class Validate
                     array_push($this->message, "The language selected is not supported by this application");
                 }
             }
+
         }
 
         return $this->valid;
